@@ -8,5 +8,6 @@ namespace RepositoryLayer.Interface
     public interface IUserRL
     {
         public void AddUser(UserModel userModel);
+        public List<UserResponseModel> GetAllUsers();
     }
 }
