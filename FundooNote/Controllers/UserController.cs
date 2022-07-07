@@ -34,9 +34,23 @@ namespace FundooNote.Controllers
         {
             try
             {
-                List<UserResponseModel> users = new List<UserResponseModel>();
-                users = this.userBL.GetAllUsers();
-                return Ok(new { success = true, Message = "All Users fetch successfully", data = users });
+                List<UserResponseModel> userModel = new List<UserResponseModel>();
+                userModel = this.userBL.GetAllUsers();
+                return Ok(new { success = true, Message = "All Users fetch successfully", data = userModel });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost("Login")]
+        public IActionResult CheckUser(LoginUserModel user)
+        {
+            try
+            {
+                string result = this.userBL.LoginUser(user);
+                return Ok(new { success = true, Message = "Token Generated successfully", data = result });
+
             }
             catch (Exception ex)
             {
