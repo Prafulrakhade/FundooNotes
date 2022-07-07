@@ -39,7 +39,39 @@ namespace RepositoryLayer.Services
             {
                 throw ex;
             }
+        }
+        public List<UserResponseModel> GetAllUsers()
+        {
 
+            List<UserResponseModel> users = new List<UserResponseModel>();
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    connection.Open();
+                    SqlCommand com = new SqlCommand("spGetAllUser", connection);
+                    com.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        UserResponseModel user = new UserResponseModel();
+                        user.UserID = reader["UserID"] == DBNull.Value ? default : reader.GetInt32("UserID");
+                        user.FirstName = reader["FirstName"] == DBNull.Value ? default : reader.GetString("FirstName");
+                        user.LastName = reader["LastName"] == DBNull.Value ? default : reader.GetString("LastName");
+                        user.Email = reader["Email"] == DBNull.Value ? default : reader.GetString("Email");
+                        user.Password = reader["Password"] == DBNull.Value ? default : reader.GetString("Password");
+                        user.CreatedDate = reader["CreatedDate"] == DBNull.Value ? default : reader.GetDateTime("CreatedDate");
+                        user.ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? default : reader.GetDateTime("ModifiedDate");
+                        users.Add(user);
+                    }
+                    return users;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

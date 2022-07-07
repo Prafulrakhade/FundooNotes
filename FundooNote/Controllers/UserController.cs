@@ -2,6 +2,7 @@
 using DatabaseLayer;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace FundooNote.Controllers
 {
@@ -22,6 +23,20 @@ namespace FundooNote.Controllers
                 this.userBL.AddUser(userModel);
                 return this.Ok(new { success = true, Message = "User Registration Sucessfull" });
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                List<UserResponseModel> users = new List<UserResponseModel>();
+                users = this.userBL.GetAllUsers();
+                return Ok(new { success = true, Message = "All Users fetch successfully", data = users });
             }
             catch (Exception ex)
             {

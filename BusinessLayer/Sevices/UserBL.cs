@@ -9,21 +9,26 @@ namespace BusinessLayer.Sevices
 {
     public class UserBL : IUserBL
     {
-        IUserRL userRL;
+         IUserRL userRL;
         public UserBL(IUserRL userRL)
         {
             this.userRL = userRL;
         }
-        public void AddUser(UserModel users)
+        public void AddUser(UserModel userModel)
         {
             try
             {
-                this.userRL.AddUser(users);
+                this.userRL.AddUser(userModel);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        public List<UserResponseModel> GetAllUsers()
+        {
+            return this.userRL.GetAllUsers();
+
         }
     }
 }
