@@ -27,13 +27,11 @@ namespace FundooNote
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddAuthentication(x =>
             {
@@ -49,10 +47,8 @@ namespace FundooNote
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN")),
                     ValidateIssuer = false,
                     ValidateAudience = false
-
                 };
             });
-
             services.AddSwaggerGen(
                 setup =>
                 {
@@ -77,26 +73,21 @@ namespace FundooNote
                 {
                     { jwtSecurityScheme, Array.Empty<string>() }
                 });
-
                 }
                     );
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<IUserBL, UserBL>();
         }
-
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwagger();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
@@ -104,11 +95,10 @@ namespace FundooNote
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My FundooNotes API");
             });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-        }
+         }
     }
 }
