@@ -1,8 +1,11 @@
 ﻿using BusinessLayer.Interface;
 using DatabaseLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace FundooNote.Controllers
 {
@@ -64,6 +67,24 @@ namespace FundooNote.Controllers
             {
                 bool result = this.userBL.ForgetPasswordUser(email);
                 return Ok(new { success = true, Message = "Reset Password Link Send successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpPut("ResetPassword")]
+        public IActionResult ResetPassword(PasswordModel modelPassword)
+        {
+            try
+            {
+                var identity = User.Identity as ClaimsIdentity;
+                IEnumerable<Claim> claims = identity.Claims;
+                var email = claims.Where(p => p.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").FirstOrDefault()?.Value;
+                bool result = this.userBL.ResetPassoword(email, modelPassword);
+                return Ok(new { success = true, Message = $"{email} your Password Updated successfully!" });
+
             }
             catch (Exception ex)
             {
